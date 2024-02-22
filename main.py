@@ -1,45 +1,50 @@
 import numpy as np
+from time import perf_counter
+from random import randint
+
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
 
 
-def start():
-    arr = np.array([5, 9, 10, 'ad', 7])
-    arr = arr[::-1]
-    print(arr)
+def first_task():
+    array1 = np.random.randint(10, size=1000000)
+    array2 = np.random.randint(10, size=1000000)
+
+    start = perf_counter()
+
+    res = np.multiply(array1, array2)
+
+    all_time = perf_counter() - start
+    print(f"Время работы с numpy: {all_time}")
+
+    array1 = [randint(0, 10) for _ in range(1000000)]
+    array2 = [randint(0, 10) for _ in range(1000000)]
+
+    start = perf_counter()
+
+    res = []
+    for i in range(1000000):
+        res.append(array1[i] * array2[i])
+
+    all_time = perf_counter() - start
+    print(f"Время работы без numpy: {all_time}")
 
 
-def tableLoad():
-    arr = np.genfromtxt('voltage.csv', delimiter=',')
-    time = arr[:100,0]
-    time = time[:,np.newaxis]
-    curr = arr[:100,1]
-    curr = curr[:,np.newaxis]
-    volt = arr[:100,2]
-    volt = volt[:,np.newaxis]
+def second_task():
+    array = np.loadtxt('data2.csv', delimiter=',', dtype='str')
+    column3 = np.transpose(array[1:])[2]
+    column3 = np.array(column3, dtype=np.longdouble)
 
-    plt.plot(time, curr * 50, 'b', time, volt, 'r')
+    plt.hist(column3, edgecolor='black', bins=100)
+    plt.title('Solids')
+    plt.xlabel('значение')
+    plt.ylabel('количество')
     plt.show()
 
 
-def hist():
-    arr = np.genfromtxt('test.csv', delimiter=',')
-    arr = arr[1:]
-    daysInYear = 365.25
-
-    age = np.int_(arr[:,1] / daysInYear)
-
-    fig = plt.figure(figsize=(6, 4))
-    ax = fig.add_subplot()
-    ax.hist(age, 100, (50, 60))
-    ax.grid()
-    plt.show()
-
-
-def plot3d():
+def third_task():
     np.random.seed(40)
-    xs = np.linspace(0, 10, 20)
-    ys = xs
+    xs = np.linspace(-np.pi, np.pi, 20)
+    ys = 1 / xs
     zs = np.sin(xs)
 
     fig = plt.figure()
@@ -47,9 +52,6 @@ def plot3d():
     ax.plot(xs, ys, zs, marker='x', c='red')
     plt.show()
 
-
-if __name__ == '__main__':
-    #start()
-    #tableLoad()
-    #hist()
-    plot3d()
+# first_task()
+# second_task()
+# third_task()
